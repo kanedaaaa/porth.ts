@@ -15,7 +15,7 @@ class VM extends CORE {
 		super()
 	}
 
-	public simulate(
+	simulate(
 		program: Array<[number, null] | [number, number]>
 	): number | undefined {
 		if (OP.COUNT != 4) throw 'Missing an op maybe?'

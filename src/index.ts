@@ -5,6 +5,9 @@ import process from 'process'
 import { exec } from 'child_process'
 import fs from 'fs'
 
+const core: ICore = new CORE()
+const vm: IVM = new VM()
+
 const formatPath = (path: string, add: string): string => {
 	const r = new RegExp('/(?!.*/).*')
 	const n = path.replace(r, add)
@@ -12,48 +15,70 @@ const formatPath = (path: string, add: string): string => {
 	return n
 }
 
-const main = (): number | undefined => {
-	const core: ICore = new CORE()
-	const vm: IVM = new VM()
+const pathError = (): string => {
+	return `
+        Usage: index.ts <SUBCOMMAND> [ARGS]
+        "sim" to simulate the program
+        "compile [ARGS]" to compile the program
+    `
+}
 
-	if (process.argv.length < 3) {
-		console.log('Usage: index.ts <SUBCOMMAND> [ARGS]')
-		console.log("Supported args: 'sim' | 'compile'")
+const read_from_source = (path: string) => {
+	const source = fs.readFileSync(path, 'utf-8').split(' ')
+
+	let stack = []
+
+	for (let word of source) {
+		if (word == '+') {
+			stack.push(core.add())
+		} else if (word == '-') {
+			stack.push(core.sub())
+		} else if (word == '.') {
+			stack.push(core.dump())
+		} else stack.push(core.push(Number(word)))
+	}
+
+	return stack
+}
+
+const main = (): number | undefined => {
+	let argv = process.argv
+	argv = argv.splice(2)
+
+	if (argv.length < 2) {
+		console.log(pathError())
 		return 1
 	}
 
-	if (process.argv[2] == 'sim') {
-		fs.writeFileSync(`${process.argv[3]}`, '')
-		console.log(
-			vm.simulate([
-				core.push(20),
-				core.push(20),
-				core.add(),
-				core.push(1),
-				core.sub(),
-				core.dump()
-			])
-		)
-	} else if (process.argv[2] == 'compile' && process.argv[3] !== undefined) {
-		if (fs.existsSync(process.argv[3])) {
-			fs.unlink(process.argv[3], (err: any) => {
-				if (err) throw err
-			})
+	if (argv[0] == 'sim' && argv[1] !== undefined) {
+		let stack = []
+
+		if (fs.existsSync(argv[1])) {
+			stack = read_from_source(argv[1])
+		} else {
+			throw `${argv[1]} path doesnt exists`
 		}
 
-		vm.compile(
-			[
-				core.push(20),
-				core.push(20),
-				core.add(),
-				core.push(1),
-				core.sub(),
-				core.dump()
-			],
-			process.argv[3]
-		)
+		console.log(vm.simulate(stack))
+
+	} else if (argv[0] == 'compile' && argv[1] !== undefined && argv[2] !== undefined) {
+		console.log('Compiling code...')
+
+        let stack = []
+        
+		if (fs.existsSync(argv[1]) && fs.existsSync(argv[2])) {
+			fs.unlink(argv[2], (err: any) => {
+				if (err) throw err
+			})
+
+            stack = read_from_source(argv[1])
+		} else {
+			throw `${argv[1]} or ${argv[2]} path doesnt exists`
+		}
+
+        vm.compile(stack, argv[2])
 		exec(
-			`nasm -felf64 ${process.argv[3]}`,
+			`nasm -felf64 ${argv[2]}`,
 			(err: any, stdout: string, stderr: string) => {
 				if (err) {
 					console.log(err)
@@ -64,8 +89,8 @@ const main = (): number | undefined => {
 		)
 
 		exec(
-			`ld -o ${formatPath(process.argv[3], '/output')} ${formatPath(
-				process.argv[3],
+			`ld -o ${formatPath(argv[2], '/output')} ${formatPath(
+				argv[2],
 				'/output.o'
 			)}`,
 			(err: any, stdout: string) => {
@@ -77,7 +102,8 @@ const main = (): number | undefined => {
 			}
 		)
 	} else {
-		throw 'Wrong argument provided'
+		console.log(pathError())
+		throw `${argv[1]} or ${argv[2]} Not found in argument list`
 	}
 }
 
