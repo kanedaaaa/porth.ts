@@ -60,23 +60,26 @@ const main = (): number | undefined => {
 		}
 
 		console.log(vm.simulate(stack))
-
-	} else if (argv[0] == 'compile' && argv[1] !== undefined && argv[2] !== undefined) {
+	} else if (
+		argv[0] == 'compile' &&
+		argv[1] !== undefined &&
+		argv[2] !== undefined
+	) {
 		console.log('Compiling code...')
 
-        let stack = []
-        
+		let stack = []
+
 		if (fs.existsSync(argv[1]) && fs.existsSync(argv[2])) {
 			fs.unlink(argv[2], (err: any) => {
 				if (err) throw err
 			})
 
-            stack = read_from_source(argv[1])
+			stack = read_from_source(argv[1])
 		} else {
 			throw `${argv[1]} or ${argv[2]} path doesnt exists`
 		}
 
-        vm.compile(stack, argv[2])
+		vm.compile(stack, argv[2])
 		exec(
 			`nasm -felf64 ${argv[2]}`,
 			(err: any, stdout: string, stderr: string) => {
