@@ -72,3 +72,34 @@
         pop rdi
         call dump
     
+        push 10
+    
+        push 15
+    
+        pop rax
+        pop rbx
+        add rax, rbx
+        push rax
+    
+        push 10
+    
+        pop rax
+        pop rbx
+        sub rbx, rax
+        push rbx
+    
+        pop rdi
+        call dump
+    
+        push 40
+    
+        push 20
+    
+        pop rax
+        pop rbx
+        sub rbx, rax
+        push rbx
+    
+        pop rdi
+        call dump
+    

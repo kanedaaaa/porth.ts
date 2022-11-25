@@ -1,6 +1,7 @@
 import OP from './enums'
+import { ICore } from './interfaces/global'
 
-class CORE {
+class CORE implements ICore {
   public constructor() {}
 
   public readonly OP = OP

@@ -9,10 +9,13 @@ interface ICore {
 }
 
 interface IVM {
-  simulate(
-    program: Array<[number, null] | [number, number]>
-  ): number | undefined
-  compile(program: Array<[number, null] | [number, number]>, path: string): any
+  simulate(program: Array<[number, null] | [number, number]>): void
+  compile(program: Array<[number, null] | [number, number]>, path: string): void
 }
 
-export { ICore, IVM }
+interface ILexer {
+  lex(path: string): Array<string>
+  tokenizer(): void
+}
+
+export { ICore, IVM, ILexer }

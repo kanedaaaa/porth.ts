@@ -9,15 +9,14 @@ import {
   asm_dump,
   header_with_dump
 } from './assembly'
+import { IVM } from './interfaces/global'
 
-class VM extends CORE {
+class VM extends CORE implements IVM {
   public constructor() {
     super()
   }
 
-  simulate(
-    program: Array<[number, null] | [number, number]>
-  ): number | undefined {
+  simulate(program: Array<[number, null] | [number, number]>) {
     if (OP.COUNT != 4) throw 'Missing an op maybe?'
 
     const stack: Array<number> = []
@@ -38,7 +37,7 @@ class VM extends CORE {
       } else if (op[0] == OP.DUMP) {
         let a = stack.pop()
 
-        if (a !== undefined) return a
+        if (a !== undefined) console.log(a)
       } else {
         throw 'Wrong instruction provided!'
       }

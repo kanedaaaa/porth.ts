@@ -1,13 +1,13 @@
 import VM from './vm'
 import CORE from './core'
-import { ICore, IVM } from './interfaces/global'
+import { ILexer, IVM } from './interfaces/global'
 import process from 'process'
 import { exec } from 'child_process'
-import lexer from './lexer'
+import Lexer from './lexer'
 import fs from 'fs'
 
-const core: ICore = new CORE()
 const vm: IVM = new VM()
+const lexer: ILexer = new Lexer()
 
 const formatPath = (path: string, add: string): string => {
   const r = new RegExp('/(?!.*/).*')
@@ -34,15 +34,15 @@ const main = (): number | undefined => {
   }
 
   if (argv[0] == 'sim' && argv[1] !== undefined) {
-    let stack = []
+    let stack: any = []
 
     if (fs.existsSync(argv[1])) {
-      stack = lexer(argv[1])
+      stack = lexer.lex(argv[1])
     } else {
       throw `${argv[1]} path doesnt exists`
     }
 
-    console.log(vm.simulate(stack))
+    vm.simulate(stack)
   } else if (
     argv[0] == 'compile' &&
     argv[1] !== undefined &&
@@ -50,14 +50,14 @@ const main = (): number | undefined => {
   ) {
     console.log('Compiling code...')
 
-    let stack = []
+    let stack: any = []
 
     if (fs.existsSync(argv[1]) && fs.existsSync(argv[2])) {
       fs.unlink(argv[2], (err: any) => {
         if (err) throw err
       })
 
-      stack = lexer(argv[1])
+      stack = lexer.lex(argv[1])
     } else {
       throw `${argv[1]} or ${argv[2]} path doesnt exists`
     }

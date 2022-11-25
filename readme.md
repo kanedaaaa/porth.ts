@@ -9,15 +9,17 @@ Basically VM has 2 options: either `simulate` or `compile`. `simulate` will just
 If you want to generate assembly and link it, use `compile`.
 
 `simulate` should be run with:
-  - `sim` 
-  - `<input-file-path>`
+
+- `sim`
+- `<input-file-path>`
 
 example: `node dist/index.js sim src/in/test.t`
 
-`compile` should be run with: 
-  - `compile` 
-  - `<input-file-path>` 
-  - `<outut-file-path>`
+`compile` should be run with:
+
+- `compile`
+- `<input-file-path>`
+- `<outut-file-path>`
 
 example: `node dist/index.js compile src/in/test.t src/out/output.asm`
 
