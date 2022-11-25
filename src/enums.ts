@@ -1,9 +1,9 @@
 enum OP {
-	PUSH = 0,
-	ADD,
-	SUB,
-	DUMP,
-	COUNT
+  PUSH = 0,
+  ADD,
+  SUB,
+  DUMP,
+  COUNT
 }
 
 export default OP

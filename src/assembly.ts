@@ -1,11 +1,11 @@
 const asm_push = (_value: number): string => {
-	return `
+  return `
         push ${_value}
     `
 }
 
 const asm_add = (): string => {
-	return `
+  return `
         pop rax
         pop rbx
         add rax, rbx
@@ -14,7 +14,7 @@ const asm_add = (): string => {
 }
 
 const asm_sub = (): string => {
-	return `
+  return `
         pop rax
         pop rbx
         sub rbx, rax
@@ -23,14 +23,14 @@ const asm_sub = (): string => {
 }
 
 const asm_dump = (): string => {
-	return `
+  return `
         pop rdi
         call dump
     `
 }
 
 const header_with_dump = (): string => {
-	return `
+  return `
     segment .text
         dump:
             push    rbp
