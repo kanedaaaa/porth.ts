@@ -14,8 +14,8 @@ interface IVM {
 }
 
 interface ILexer {
-  lex(path: string): Array<string>
-  tokenizer(): void
+  lex(path: string): Array<[[number, null], any]>
+  tokenizer(source: any): void
 }
 
 export { ICore, IVM, ILexer }

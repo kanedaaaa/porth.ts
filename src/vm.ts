@@ -7,7 +7,8 @@ import {
   asm_add,
   asm_sub,
   asm_dump,
-  header_with_dump
+  header_with_dump,
+  footer
 } from './assembly'
 import { IVM } from './interfaces/global'
 
@@ -62,6 +63,8 @@ class VM extends CORE implements IVM {
         throw 'Wrong instruction provided!'
       }
     }
+
+    fs.appendFileSync(path, footer())
   }
 }
 

@@ -6,8 +6,8 @@
     "typescript": "^4.9.3"
   },
   "scripts": {
-    "sim": "node dist/index.js sim src/out/output.asm",
-    "compile": "node dist/index.js compile src/out/output.asm",
+    "sim": "node dist/index.js sim src/in/test.t",
+    "compile": "node dist/index.js compile src/in/test.t src/out/output.asm && ./src/out/output",
     "prettier": "prettier --config .prettierc --write *"
   },
   "name": "t",

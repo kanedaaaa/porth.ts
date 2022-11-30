@@ -37,7 +37,7 @@ const main = (): number | undefined => {
     let stack: any = []
 
     if (fs.existsSync(argv[1])) {
-      stack = lexer.lex(argv[1])
+      stack = lexer.lex(argv[1])[0]
     } else {
       throw `${argv[1]} path doesnt exists`
     }
@@ -57,7 +57,7 @@ const main = (): number | undefined => {
         if (err) throw err
       })
 
-      stack = lexer.lex(argv[1])
+      stack = lexer.lex(argv[1])[0]
     } else {
       throw `${argv[1]} or ${argv[2]} path doesnt exists`
     }
