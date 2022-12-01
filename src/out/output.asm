@@ -61,6 +61,22 @@
         add rax, rbx
         push rax
     
+        push 20
+    
+        push 10
+    
+        pop rax
+        pop rbx
+        add rax, rbx
+        push rax
+    
+        mov rcx, 0
+        mov rdx, 1
+        pop rax
+        pop rbx
+        cmp rax, rbx
+        cmove rcx, rdx
+    
         pop rdi
         call dump
     

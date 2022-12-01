@@ -22,6 +22,17 @@ const asm_sub = (): string => {
     `
 }
 
+const asm_eq = (): string => {
+  return `
+        mov rcx, 0
+        mov rdx, 1
+        pop rax
+        pop rbx
+        cmp rax, rbx
+        cmove rcx, rdx
+    `
+}
+
 const asm_dump = (): string => {
   return `
         pop rdi
@@ -94,4 +105,12 @@ const footer = (): string => {
     `
 }
 
-export { asm_push, asm_add, asm_sub, asm_dump, header_with_dump, footer }
+export {
+  asm_push,
+  asm_add,
+  asm_sub,
+  asm_eq,
+  asm_dump,
+  header_with_dump,
+  footer
+}

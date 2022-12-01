@@ -1,3 +1,4 @@
+import { type } from 'os'
 import OP from './enums'
 import { ICore } from './interfaces/global'
 
@@ -16,6 +17,18 @@ class CORE implements ICore {
 
   sub(): [number, null] {
     return [OP.SUB, null]
+  }
+
+  eq(): [number, null] {
+    return [OP.EQ, null]
+  }
+
+  _if(): [number, null] {
+    return [OP.IF, null]
+  }
+
+  end(): [number, null] {
+    return [OP.END, null]
   }
 
   dump(): [number, null] {

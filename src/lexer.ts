@@ -11,7 +11,7 @@ class Lexer extends CORE implements ILexer {
     const source = fs.readFileSync(path, 'utf-8').split('\n')
 
     let fsource: Array<string> = []
-    let stack: Array<[number, null]> = []
+    let stack: Array<[number, null] | [number, number]> = []
     const tokens = this.tokenizer(source)
 
     for (let el of source) {
@@ -23,6 +23,12 @@ class Lexer extends CORE implements ILexer {
         stack.push(this.add())
       } else if (word == '-') {
         stack.push(this.sub())
+      } else if (word == '==') {
+        stack.push(this.eq())
+      } else if (word == 'თუ') {
+        stack.push(this._if())
+      } else if (word == 'დახურე') {
+        stack.push(this.end())
       } else if (word == '.') {
         stack.push(this.dump())
       } else if (!isNaN(Number(word))) {
@@ -55,9 +61,5 @@ class Lexer extends CORE implements ILexer {
     return tokens
   }
 }
-
-let l = new Lexer()
-
-l.lex('src/in/test.t')
 
 export default Lexer
