@@ -7,6 +7,8 @@ import {
   asm_add,
   asm_sub,
   asm_eq,
+  asm_if,
+  asm_end,
   asm_dump,
   header_with_dump,
   footer
@@ -68,28 +70,34 @@ class VM extends CORE implements IVM {
 
   compile(program: Array<[number, null] | [number, number]>, path: string) {
     if (OP.COUNT != 7) throw 'Missing an program[op] maybe?'
+    this.blocks(program)
 
     fs.appendFileSync(path, header_with_dump())
 
-    // for (let program[op] of program) {
-    //   if (program[op][0] == OP.PUSH && program[op][1] !== null) {
-    //     fs.appendFileSync(path, asm_push(program[op][1]))
-    //   } else if (program[op][0] == OP.ADD) {
-    //     fs.appendFileSync(path, asm_add())
-    //   } else if (program[op][0] == OP.SUB) {
-    //     fs.appendFileSync(path, asm_sub())
-    //   } else if (program[op][0] == OP.EQ) {
-    //     fs.appendFileSync(path, asm_eq())
-    //   } else if (program[op][0] == OP.IF) {
-    //     // do smth
-    //   } else if (program[op][0] == OP.END) {
-    //     // do smth
-    //   } else if (program[op][0] == OP.DUMP) {
-    //     fs.appendFileSync(path, asm_dump())
-    //   } else {
-    //     throw 'Wrong instruction provided!'
-    //   }
-    // }
+    for (let op = 0; op < program.length; ++op) {
+      if (program[op][0] == OP.PUSH && program[op][1] !== null) {
+        // same thing here, it will never be null
+        fs.appendFileSync(path, asm_push(program[op][1] as number))
+      } else if (program[op][0] == OP.ADD) {
+        fs.appendFileSync(path, asm_add())
+      } else if (program[op][0] == OP.SUB) {
+        fs.appendFileSync(path, asm_sub())
+      } else if (program[op][0] == OP.EQ) {
+        fs.appendFileSync(path, asm_eq())
+      } else if (program[op][0] == OP.IF) {
+        if (program[op][1] !== null) {
+          fs.appendFileSync(path, asm_if(program[op][1] as number))
+        } else {
+          throw 'No end block found!'
+        }
+      } else if (program[op][0] == OP.END) {
+        fs.appendFileSync(path, asm_end(op))
+      } else if (program[op][0] == OP.DUMP) {
+        fs.appendFileSync(path, asm_dump())
+      } else {
+        throw 'Wrong instruction provided!'
+      }
+    }
 
     fs.appendFileSync(path, footer())
   }

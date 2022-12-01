@@ -52,7 +52,7 @@
     global _start
         _start:
     
-        push 10
+        push 20
     
         push 20
     
@@ -63,7 +63,7 @@
     
         push 20
     
-        push 10
+        push 20
     
         pop rax
         pop rbx
@@ -76,10 +76,19 @@
         pop rbx
         cmp rax, rbx
         cmove rcx, rdx
+        push rcx
+    
+        pop rax
+        test rax, rax
+        jz addr_10
+  
+        push 10
     
         pop rdi
         call dump
     
+    addr_10:
+  
         mov rax, 60
         mov rdi, 0
         syscall

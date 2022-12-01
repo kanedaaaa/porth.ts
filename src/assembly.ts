@@ -30,7 +30,22 @@ const asm_eq = (): string => {
         pop rbx
         cmp rax, rbx
         cmove rcx, rdx
+        push rcx
     `
+}
+
+const asm_if = (jump_to: number): string => {
+  return `
+        pop rax
+        test rax, rax
+        jz addr_${jump_to}
+  `
+}
+
+const asm_end = (address: number): string => {
+  return `
+    addr_${address}:
+  `
 }
 
 const asm_dump = (): string => {
@@ -110,6 +125,8 @@ export {
   asm_add,
   asm_sub,
   asm_eq,
+  asm_if,
+  asm_end,
   asm_dump,
   header_with_dump,
   footer
